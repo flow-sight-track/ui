@@ -13,7 +13,7 @@ export const theme = createTheme(
     components: {
       MuiTextField: {
         defaultProps: {
-          size: 'small'
+          size: 'medium'
         }
       },
       MuiSelect: {
