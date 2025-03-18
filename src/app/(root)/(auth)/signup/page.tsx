@@ -1,43 +1,62 @@
 'use client'
 
-import { useFormState } from 'react-dom'
 import NextLink from 'next/link'
+
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Button, Card, Link, Stack, TextField } from '@mui/material'
 
-import createUser from '@/actions/auth/create-user'
+import createUser from '@/modules/auth/actions/auth/create-user'
+import { CreateUser } from '@/modules/auth/types/auth/create-user'
+import { CreteUserSchema } from '@/modules/auth/schemas/auth/crete-user-schema'
 
 const SignUpPage = () => {
-  const [state, formAction] = useFormState(createUser, {
-    error: ''
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    resolver: zodResolver(CreteUserSchema)
   })
+
+  const onSubmit = async (data: CreateUser): Promise<void> => {
+    try {
+      const formData = new FormData()
+      formData.append('name', data.name)
+      formData.append('email', data.email)
+      formData.append('password', data.password)
+      await createUser(null, formData)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
-    <form action={formAction} className="w-full max-w-md">
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md">
       <Card className="p-6">
         <Stack spacing={2}>
           <TextField
-            type="name"
-            name="name"
+            {...register('name')}
             label="Nome"
             variant="outlined"
-            helperText={state.error}
-            error={!!state.error}
+            helperText={errors.name?.message}
+            error={!!errors.name}
           />
           <TextField
-            type="email"
-            name="email"
+            {...register('email')}
             label="E-mail"
             variant="outlined"
-            helperText={state.error}
-            error={!!state.error}
+            helperText={errors.email?.message}
+            error={!!errors.email}
           />
           <TextField
-            type="password"
-            name="password"
+            {...register('password')}
             label="Senha"
             variant="outlined"
-            helperText={state.error}
-            error={!!state.error}
+            type="password"
+            helperText={errors.password?.message}
+            error={!!errors.password}
           />
           <Button type="submit" variant="contained">
             Registrar
