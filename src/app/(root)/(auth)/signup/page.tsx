@@ -1,17 +1,53 @@
+'use client'
+
+import { useFormState } from 'react-dom'
 import NextLink from 'next/link'
 
-import { Button, Link, Stack, TextField } from '@mui/material'
+import { Button, Card, Link, Stack, TextField } from '@mui/material'
+
+import createUser from '@/actions/auth/create-user'
 
 const SignUpPage = () => {
+  const [state, formAction] = useFormState(createUser, {
+    error: ''
+  })
   return (
-    <Stack spacing={2} className="w-full max-w-sm">
-      <TextField type="email" label="E-mail" variant="outlined" />
-      <TextField type="password" label="Senha" variant="outlined" />
-      <Button variant="contained">Login</Button>
-      <Link href="/signin" component={NextLink} className="self-center">
-        Já tem uma conta? Faça seu login
-      </Link>
-    </Stack>
+    <form action={formAction} className="w-full max-w-md">
+      <Card className="p-6">
+        <Stack spacing={2}>
+          <TextField
+            type="name"
+            name="name"
+            label="Nome"
+            variant="outlined"
+            helperText={state.error}
+            error={!!state.error}
+          />
+          <TextField
+            type="email"
+            name="email"
+            label="E-mail"
+            variant="outlined"
+            helperText={state.error}
+            error={!!state.error}
+          />
+          <TextField
+            type="password"
+            name="password"
+            label="Senha"
+            variant="outlined"
+            helperText={state.error}
+            error={!!state.error}
+          />
+          <Button type="submit" variant="contained">
+            Registrar
+          </Button>
+          <Link href="/signin" component={NextLink} className="self-center">
+            Já tem uma conta? Faça seu login
+          </Link>
+        </Stack>
+      </Card>
+    </form>
   )
 }
 
