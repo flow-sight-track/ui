@@ -2,7 +2,7 @@
 
 import { useContext } from 'react'
 
-import { Drawer, Divider, Box } from '@mui/material'
+import { Drawer, Box } from '@mui/material'
 
 import { AuthContext } from '@/contexts/auth-context'
 
@@ -34,7 +34,6 @@ export const Sidebar = () => {
       <div className="flex items-center p-3">
         <Logo />
       </div>
-      <Divider />
       <div className="flex flex-col justify-between h-full">
         <NavLink />
         <Box component="div" className="flex items-center justify-between p-4">
