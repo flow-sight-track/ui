@@ -7,6 +7,8 @@ import { jwtDecode } from 'jwt-decode'
 
 import { API_URL } from '@/constants/api'
 
+import { AUTHENTICATION_COOKIE } from '@/constants/auth-cookie'
+
 import { getErrorMessage } from '@/lib/errors'
 
 export default async function loginUser(
@@ -39,7 +41,7 @@ const setAuthCookie = (response: Response) => {
   if (setCookieHeader) {
     const token = setCookieHeader.split(';')[0].split('=')[1]
     cookies().set({
-      name: 'Authentication',
+      name: AUTHENTICATION_COOKIE,
       value: token,
       secure: true,
       httpOnly: true,
