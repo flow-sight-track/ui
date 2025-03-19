@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
+import authenticated from './hooks/auth/authenticated'
 
 const unauthorizedRoutes = ['/signin', '/signup']
 
 export function middleware(request: NextRequest) {
-  const auth = request.cookies.get('Authentication')?.value
-
   if (
-    !auth &&
+    !authenticated() &&
     !unauthorizedRoutes.some((route) =>
       request.nextUrl.pathname.startsWith(route)
     )
