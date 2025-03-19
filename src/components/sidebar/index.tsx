@@ -1,32 +1,23 @@
-import {
-  Drawer,
-  Divider,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Box,
-  Avatar,
-  Typography
-} from '@mui/material'
+'use client'
 
-import { LayoutDashboardIcon, LogOutIcon } from 'lucide-react'
+import { useContext } from 'react'
+
+import { Drawer, Divider, Box } from '@mui/material'
+
+import { AuthContext } from '@/contexts/auth-context'
 
 import { drawerWidth } from '@/lib/size'
 
 import { Logo } from '../logo'
-
-const routes = [
-  {
-    icon: <LayoutDashboardIcon />,
-    label: 'Dashboard',
-    href: '/dashboard',
-    active: true
-  }
-]
+import { NavLink } from '../nav-link'
+import { Profile } from '../profile'
 
 export const Sidebar = () => {
+  const isAuthencated = useContext(AuthContext)
+
+  // TODO - Change this to a proper check isAdmin
+  console.log(isAuthencated)
+
   return (
     <Drawer
       sx={{
@@ -45,27 +36,9 @@ export const Sidebar = () => {
       </div>
       <Divider />
       <div className="flex flex-col justify-between h-full">
-        <List>
-          {routes.map((route) => (
-            <ListItem key={route.label} disablePadding>
-              <ListItemButton LinkComponent="a" href={route.href}>
-                <ListItemIcon>{route.icon}</ListItemIcon>
-                <ListItemText primary={route.label} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        <NavLink />
         <Box component="div" className="flex items-center justify-between p-4">
-          <Box component="div" className="flex items-center gap-4">
-            <Avatar
-              alt="Jane Doe"
-              src="https://mighty.tools/mockmind-api/content/human/125.jpg"
-            />
-            <Typography variant="body2">Jane Doe</Typography>
-          </Box>
-          <Box>
-            <LogOutIcon className="size-4" />
-          </Box>
+          <Profile />
         </Box>
       </div>
     </Drawer>
