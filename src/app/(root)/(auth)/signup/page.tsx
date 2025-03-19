@@ -1,17 +1,30 @@
 'use client'
 
+import { useState } from 'react'
+
 import NextLink from 'next/link'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Button, Card, Link, Stack, TextField } from '@mui/material'
+import {
+  Button,
+  Card,
+  CircularProgress,
+  LinearProgress,
+  Link,
+  Stack,
+  TextField
+} from '@mui/material'
 
 import createUser from '@/modules/auth/actions/auth/create-user'
 import { CreateUser } from '@/modules/auth/types/auth/create-user'
 import { CreteUserSchema } from '@/modules/auth/schemas/auth/crete-user-schema'
 
 const SignUpPage = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [disabled, setDisabled] = useState<boolean>(false)
+
   const {
     register,
     handleSubmit,
@@ -22,6 +35,8 @@ const SignUpPage = () => {
 
   const onSubmit = async (data: CreateUser): Promise<void> => {
     try {
+      setIsLoading(true)
+      setDisabled(true)
       const formData = new FormData()
       formData.append('name', data.name)
       formData.append('email', data.email)
@@ -29,11 +44,15 @@ const SignUpPage = () => {
       await createUser(null, formData)
     } catch (error) {
       console.error(error)
+    } finally {
+      setIsLoading(false)
+      setDisabled(false)
     }
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md">
+      {isLoading && <LinearProgress />}
       <Card className="p-6">
         <Stack spacing={2}>
           <TextField
@@ -58,7 +77,12 @@ const SignUpPage = () => {
             helperText={errors.password?.message}
             error={!!errors.password}
           />
-          <Button type="submit" variant="contained">
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={disabled}
+            endIcon={isLoading && <CircularProgress size={16} />}
+          >
             Registrar
           </Button>
           <Link href="/signin" component={NextLink} className="self-center">
